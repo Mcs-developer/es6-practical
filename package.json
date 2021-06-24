@@ -1,0 +1,19 @@
+{
+  "name": "es6-practical",
+  "version": "1.0.0",
+  "description": "The objective of this project is to practice some topics of the ES6 spec with vanillaJS. Promises, modules and good practices are going to be applied here.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mcs-developer/es6-practical.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mcs-developer/es6-practical/issues"
+  },
+  "homepage": "https://github.com/Mcs-developer/es6-practical#readme"
+}

@@ -21,6 +21,7 @@
     "@babel/preset-env": "^7.14.7",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
+    "gulp": "^4.0.2",
     "http-server": "^0.12.3"
   }
 }

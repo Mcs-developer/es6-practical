@@ -4,7 +4,6 @@ const uglify = require('gulp-uglify');
 const concat = require('gulp-concat');
 const del = require('del');
 const browserSync = require('browser-sync').create();
-const rollup = require('gulp-rollup');
 
 const clean = () => {
     return del(['dist/**'])
@@ -15,14 +14,8 @@ const javascript = () => {
         .pipe(babel({
             presets: ["@babel/preset-env"]
         }))
-        // .pipe(concat('main.js', { newLine: ';' }))
+        .pipe(concat('main.js', { newLine: ';' }))
         .pipe(dest('dist/'));
-}
-
-const bundle = () => {
-    return src('dist/*.js')
-        .pipe(concat('main.js'))
-        .pipe(dest('dist/'))
 }
 
 const browserSyncServe = (cb) => {
@@ -45,5 +38,5 @@ const watch = () => {
     watch('src/*.js', series(clean, javascript, browserSyncReload));
 }
 
-exports.js = series(clean, javascript, bundle);
+exports.js = series(clean, javascript);
 

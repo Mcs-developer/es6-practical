@@ -1,1 +1,0 @@
-export const MY_VALUE_2 = 'MY_VALUE_2';

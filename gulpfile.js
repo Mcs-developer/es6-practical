@@ -1,8 +1,9 @@
-const { series, src, dest } = require('gulp');
+const { series, src, dest, watch } = require('gulp');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
 const concat = require('gulp-concat');
 const del = require('del');
+const replace = require('gulp-replace');
 const browserSync = require('browser-sync').create();
 
 const clean = () => {
@@ -10,18 +11,19 @@ const clean = () => {
 }
 
 const javascript = () => {
-    return src('src/*.js')
+    return src('src/*.js', { sourcemaps: true })
         .pipe(babel({
             presets: ["@babel/preset-env"]
         }))
         .pipe(concat('main.js', { newLine: ';' }))
-        .pipe(dest('dist/'));
+        .pipe(uglify())
+        .pipe(dest('dist/', { sourcemaps: '.' }));
 }
 
 const browserSyncServe = (cb) => {
     browserSync.init({
         server: {
-            baseDir: 'src'
+            baseDir: '.'
         }
     });
 
@@ -33,10 +35,22 @@ const browserSyncReload = (cb) => {
     cb();
 }
 
-const watch = () => {
-    watch('src/index.html', browserSyncReload);
-    watch('src/*.js', series(clean, javascript, browserSyncReload));
+const cache = () => {
+    return src('index.html')
+    .pipe(replace('/version=\d+/', `version=${new Date().getTime()}`))
+    .pipe(dest('.'))
 }
 
-exports.js = series(clean, javascript);
+const watchFiles = () => {
+    watch('index.html', browserSyncReload);
+    watch('src/*.js', series(clean, javascript, cache, browserSyncReload));
+}
+
+exports.default = series(
+    clean,
+    javascript,
+    cache,
+    browserSyncServe,
+    watchFiles
+)
 

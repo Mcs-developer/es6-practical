@@ -5,17 +5,49 @@ const REQUEST_HEADERS = {
     }
 };
 
-const getAppData = () => {
-    return fetch('data.json', REQUEST_HEADERS)
-    .then((response) => response.json())
-    .catch(() => console.error('please set a data.json file with the app data'))
+const elementlist = (list) => {
+    const ul = document.createElement('ul');
+    list.forEach(element => {
+        const li = document.createElement('li');
+        const text = document.createTextNode(element['name']);
+        li.appendChild(text);
+
+        ul.appendChild(li);
+    });
+
+    return ul;
 }
 
-const getGenders = () => {
-    getAppData()
-    .then(({api_key, api_resource}) => fetch(`${api_resource}/3/genre/movie/list?api_key=${api_key}&language=en-US`, REQUEST_HEADERS))
-    .then((response) => response.json())
-    .then(data => console.log(data))
+const appDataRequest = () => fetch('data.json', REQUEST_HEADERS);
+const gendersRequest = ({ api_key, api_resource }) => fetch(`${api_resource}/3/genre/movie/list?api_key=${api_key}&language=en-US`, REQUEST_HEADERS);
+
+
+async function getGenders() {
+    try {
+        const appData = await appDataRequest();
+        const jsonResponse = await appData.json();
+
+        const dataGenders = await gendersRequest(jsonResponse);
+        const { genres } = await dataGenders.json();
+
+        return genres;
+    } catch (error) {
+        console.error(error);
+    }
 }
 
-getGenders();
+
+async function buildGenderList() {
+    try {
+        const genders = await getGenders();
+
+        const container = document.getElementById('container');
+        container.appendChild(elementlist(genders));
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+buildGenderList();

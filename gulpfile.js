@@ -13,7 +13,7 @@ const clean = () => {
 const javascript = () => {
     return src('src/*.js', { sourcemaps: true })
         .pipe(babel({
-            presets: ["@babel/preset-env"]
+            plugins: ['@babel/transform-runtime']
         }))
         .pipe(concat('main.js', { newLine: ';' }))
         .pipe(uglify())
@@ -37,8 +37,8 @@ const browserSyncReload = (cb) => {
 
 const cache = () => {
     return src('index.html')
-    .pipe(replace('/version=\d+/', `version=${new Date().getTime()}`))
-    .pipe(dest('.'))
+        .pipe(replace('/version=\d+/', `version=${new Date().getTime()}`))
+        .pipe(dest('.'))
 }
 
 const watchFiles = () => {
